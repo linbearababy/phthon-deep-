@@ -24,3 +24,4 @@
 
 ![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/Python%20digino/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-26%2017.40.09.png)
 
+![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/Python%20digino/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-26%2017.40.20.png)
