@@ -60,3 +60,19 @@ git clone https://github.com/django/django.git
     ……
     Starting development server at http://127.0.0.1:8000/
     Quit the server with CONTROL-C.
+
+
+# 在 Cloud Studio 中运行 Django
+下面我们介绍如何在 Cloud Studio 中安装、使用 Django：
+
+    step1：访问 腾讯云开发者平台，注册/登录账户。
+
+    step2：在右侧的运行环境菜单选择："ubuntu"
+    
+step3：
+ 在下方的终端执行命令，使用 pip 安装：
+
+    sudo pip3 install django
+    step4：查看 Django 版本：
+
+    django-admin --version
