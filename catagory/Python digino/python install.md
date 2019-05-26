@@ -22,3 +22,5 @@
 # Django 安装
 下载 Django 压缩包，解压并和Python安装目录放在同一个根目录，进入 Django 目录，执行python setup.py install，然后开始安装，Django将要被安装到Python的Lib下site-packages。
 
+![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/Python%20digino/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-26%2017.40.09.png)
+
