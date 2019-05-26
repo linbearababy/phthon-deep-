@@ -69,6 +69,8 @@ git clone https://github.com/django/django.git
 
     step2：在右侧的运行环境菜单选择："ubuntu"
     
+   ![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/Python%20digino/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-26%2017.55.16.png)
+    
 step3：
  在下方的终端执行命令，使用 pip 安装：
 
