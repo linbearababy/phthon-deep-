@@ -30,3 +30,33 @@
 
 
 ![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/Python%20digino/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-26%2017.43.58.png)
+
+
+
+$ tar zxvf Django-1.x.y.tar.gz
+你也可以从 Github 上下载最新版，地址：https://github.com/django/django：
+
+git clone https://github.com/django/django.git
+安装
+进入解压后的目录：
+
+    cd Django-1.x.y
+    sudo python setup.py install
+
+安装成功后会输出以下信息：
+
+    ……
+    Processing dependencies for Django==1.x.y
+    Finished processing dependencies for Django==1.x.y
+
+再进入我们的站点目录，创建 Django 项目：
+
+    $ django-admin.py startproject testdj
+
+启动服务：
+
+    cd testdj # 切换到我们创建的项目
+    $ python manage.py runserver
+    ……
+    Starting development server at http://127.0.0.1:8000/
+    Quit the server with CONTROL-C.
