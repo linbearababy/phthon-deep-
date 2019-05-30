@@ -22,3 +22,9 @@ https://www.huxiu.com/article/254155.html （举了生活中常用的例子，�
 具体的来讲就是----百度一下哈哈哈：
 https://baike.baidu.com/item/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/5162711?fromtitle=%E7%BD%91%E7%BB%9C%E8%9C%98%E8%9B%9B&fromid=371999
 
+
+用py3写爬虫的话，强力推荐这本书，应该是目前最系统最完善介绍python爬虫的书。可以去图灵社区买电子版。书的内容很新也很系统，从beautifulSoup，requests到ajax，图像识别，单元测试。比起绝大多数blog零散的教程要好的多，看完书后就可以去做些实战项目，这个时候可以去github上找类似的项目借鉴下。
+
+英文版pdf： https://pan.baidu.com/s/1nvQ1Kpj 密码: 82m9
+
+中文版pdf： 图灵社区 : 图书  : Python网络数据采集
