@@ -28,3 +28,4 @@ https://baike.baidu.com/item/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/5162711?fromti
 英文版pdf： https://pan.baidu.com/s/1nvQ1Kpj 密码: 82m9
 
 中文版pdf： 图灵社区 : 图书  : Python网络数据采集
+http://www.ituring.com.cn/book/tupubarticle/9142
