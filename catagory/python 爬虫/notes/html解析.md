@@ -16,3 +16,32 @@
             • 如果你要找的信息只存在于一个网站上，别处没有，那你确实是运气不佳。如果不只限 于这个网站，那么你可以找找其他数据源。有没有其他网站也显示了同样的数据?网站
              上显示的数据是不是从其他网站上抓取后攒出来的?
             尤其是在面对埋藏很深或格式不友好的数据时，千万不要不经思考就写代码，一定要三思 而后行。如果你确定自己不能另辟蹊径，那么本章后面的内容就是为你准备的。
+
+# 2.2 再端一碗BeautifulSoup
+
+在第 1 章里，我们快速演示了 BeautifulSoup 的安装与运行过程，同时也实现了每次选择一 个对象的解析方法。在这一节，我们将介绍通过属性查找标签的方法，标签组的使用，以 及标签解析树的导航过程。
+
+基本上，你见过的每个网站都会有层叠样式表(Cascading Style Sheet，CSS)。虽然你可 能会认为，专门为了让浏览器和人类可以理解网站内容而设计一个展现样式的层，是一件 愚蠢的事，但是 CSS 的发明却是网络爬虫的福音。CSS 可以让 HTML 元素呈现出差异化， 使那些具有完全相同修饰的元素呈现出不同的样式。比如，有一些标签看起来是这样:
+
+               <span class="green"></span> 而另一些标签看起来是这样:
+               <span class="red"></span>
+               
+网络爬虫可以通过 class 属性的值，轻松地区分出两种不同的标签。例如，它们可以用 BeautifulSoup 抓取网页上所有的红色文字，而绿色文字一个都不抓。因为 CSS 通过属性准 确地呈现网站的样式，所以你大可放心，大多数新式网站上的 class 和 id 属性资源都非常 丰富。
+
+下面让我们创建一个网络爬虫来抓取 http://www.pythonscraping.com/pages/warandpeace.html 这个网页。
+
+在这个页面里，小说人物的对话内容都是红色的，人物名称都是绿色的。你可以看到网页源代码里的 span 标签，引用了对应的 CSS 属性，如下所示:
+
+          "<span class="red">Heavens! what a virulent attack!</span>" replied <span class=
+                 "green">the prince</span>, not in the least disconcerted by this reception.
+我们可以抓出整个页面，然后创建一个 BeautifulSoup 对象，和第 1 章里使用的程序类似:
+
+               from urllib.request import urlopen
+               from bs4 import BeautifulSoup
+               html = urlopen("http://www.pythonscraping.com/pages/warandpeace.html") bsObj = BeautifulSoup(html)
+通过 BeautifulSoup 对象，我们可以用 findAll 函数抽取只包含在 <span class="green"></ span> 标签里的文字，这样就会得到一个人物名称的 Python 列表(findAll 是一个非常灵 活的函数，我们后面会经常用到它):
+
+               nameList = bsObj.findAll("span", {"class":"green"}) for name in nameList:
+               print(name.get_text())
+代码执行以后就会按照《战争与和平》中的人物出场顺序显示所有的人名。这是怎么实现 的呢?之前，我们调用 bsObj.tagName 只能获取页面中的第一个指定的标签。现在，我们 调用 bsObj.findAll(tagName, tagAttributes) 可以获取页面中所有指定的标签，不再只是 第一个了。
+获取人名列表之后，程序遍历列表中所有的名字，然后打印 name.get_text()，就可以把标 签中的内容分开显示了。
