@@ -122,3 +122,63 @@ BeautifulSoup 对象通过 find 和 findAll，或者直接调用子标签获取�
 
 这四个对象是你用 BeautifulSoup 库时会遇到的所有对象
 
+
+# 2.2.3 导航树
+findAll 函数通过标签的名称和属性来查找标签 。但是如果你需要通过标签在文档中的位 置来查找标签，该怎么办?这就是导航树(Navigating Trees)的作用。在第 1 章里，我们 看过用单一方向进行 BeautifulSoup 标签树的导航:
+    
+    bsObj.tag.subTag.anotherSubTag
+现在我们用虚拟的在线购物网站 http://www.pythonscraping.com/pages/page3.html 作为要抓 取的示例网页，演示 HTML 导航树的纵向和横向导航
+
+这个 HTML 页面可以映射成一棵树(为了简洁，省略了一些标签)，如下所示:
+
+     • html
+       — body
+         — div.wrapper 
+            — h1
+            — div.content 
+            — table#giftList
+               — tr
+                    — th
+                    — th 
+                    — th 
+                    — th
+               — tr.gift#gift1 
+                    — td
+                    — td
+                         — span.excitingNote
+                    — td 
+                    — td
+                         — img
+          — ......其他表格行省略了......
+     — div.footer
+在后面几节内容里，我们仍然以这个 HTML 标签结构为例。
+
+1. 处理子标签和其他后代标签 在计算机科学和一些数学领域中，你经常会听到“虐子”事件(比喻对一些子事件 的处理方式):移动它们，储存它们，删除它们，甚至杀死它们。值得庆幸的是，在 BeautifulSoup 里，子标签的处理方式没那么残忍。
+
+和许多其他库一样，在 BeautifulSoup 库里，孩子(child)和后代(descendant)有显著的 不同:和人类的家谱一样，子标签就是一个父标签的下一级，而后代标签是指一个父标签 下面所有级别的标签。例如，tr 标签是 tabel 标签的子标签，而 tr、th、td、img 和 span 标签都是 tabel 标签的后代标签(我们的示例页面中就是如此)。所有的子标签都是后代标 签，但不是所有的后代标签都是子标签。
+
+一般情况下，BeautifulSoup 函数总是处理当前标签的后代标签。例如，bsObj.body.h1 选 择了 body 标签后代里的第一个 h1 标签，不会去找 body 外面的标签。
+
+类似地，bsObj.div.findAll("img") 会找出文档中第一个 div 标签，然后获取这个 div 后 代里所有的 img 标签列表。
+
+如果你只想找出子标签，可以用 .children 标签: 
+
+          from urllib.request import urlopen
+          from bs4 import BeautifulSoup
+          html = urlopen("http://www.pythonscraping.com/pages/page3.html")
+          bsObj = BeautifulSoup(html)
+          for child in bsObj.find("table",{"id":"giftList"}).children:
+          print(child)
+这段代码会打印 giftList 表格中所有产品的数据行。如果你用 descendants() 函数而不是 children() 函数，那么就会有二十几个标签打印出来，包括 img 标签、span 标签，以及每 个 td 标签。掌握子标签与后代标签的差别十分重要!
+
+
+2. 处理兄弟标签
+BeautifulSoup 的 next_siblings() 函数可以让收集表格数据成为简单的事情，尤其是处理 带标题行的表格:
+
+     from urllib.request import urlopen
+     from bs4 import BeautifulSoup
+     html = urlopen("http://www.pythonscraping.com/pages/page3.html") 
+     bsObj=BeautifulSoup(html)
+     for sibling in bsObj.find("table",{"id":"giftList"}).tr.next_siblings: 
+          print(sibling)
+这段代码会打印产品列表里的所有行的产品，第一行表格标题除外。为什么标题行被跳过 了呢?有两个理由。首先，对象不能把自己作为兄弟标签。任何时候你获取一个标签的兄 弟标签，都不会包含这个标签本身。其次，这个函数只调用后面的兄弟标签。例如，如果 我们选择一组标签中位于中间位置的一个标签，然后用 next_siblings() 函数，那么它就 只会返回在它后面的兄弟标签。因此，选择标签行然后调用 next_siblings，可以选择表 格中除了标题行以外的所有行。
