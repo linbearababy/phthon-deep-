@@ -271,3 +271,4 @@ $15.00)。
 
 表 2-1 用简单的说明和例子列举了正则表达式的一些常用符号。这个列表并不是全部符 号，另外就像之前所说的，可能在不同编程语言中会遇到一些变化。但是，这 12 个符号 是 Python 的正则表达式中最常用的，可以用来查找和收集绝大多数数据类型。
 
+![])(https://github.com/linbearababy/phthon-deep-/blob/master/catagory/python%20%E7%88%AC%E8%99%AB/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-31%2019.44.02.png)
