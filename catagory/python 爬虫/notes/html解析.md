@@ -272,3 +272,80 @@ $15.00)。
 表 2-1 用简单的说明和例子列举了正则表达式的一些常用符号。这个列表并不是全部符 号，另外就像之前所说的，可能在不同编程语言中会遇到一些变化。但是，这 12 个符号 是 Python 的正则表达式中最常用的，可以用来查找和收集绝大多数数据类型。
 
 ![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/python%20%E7%88%AC%E8%99%AB/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-31%2019.44.02.png)
+
+正则表达式:并非处处正则!
+
+正则表达式的标准版(本书使用的版本，用于 Python 和 BeautifulSoup)是基 于 Perl 语法演变而来的。绝大多数主流编程语言都使用与之相同或近似的版 本。但是，在其他语言中使用这些正则表达式时需要当心，否则可能会出问 题。有些语言，比如 Java，其正则表达式就和 Python 不太一样。总之，遇 到问题时看文档!
+
+2.4 正则表达式和BeautifulSoup
+
+如果你觉得前面介绍的正则表达式内容与本书的主题有点儿脱节，那么这里就把它们连接 起来。在抓取网页的时候，BeautifulSoup 和正则表达式总是配合使用的。其实，大多数支 持字符串参数的函数(比如，find(id="aTagIdHere"))都可以用正则表达式实现。
+
+让我们看几个例子，待抓取的网页是 http://www.pythonscraping.com/pages/page3.html。 注意观察网页上有几个商品图片——它们的源代码形式如下:
+
+            <img src="../img/gifts/img3.jpg">
+            
+如果我们想抓取所有图片的 URL 链接，非常直接的做法就是用 findAll("img") 抓取所有 图片，对吗?但是，有个问题。除了那些明显“多余的”图片(比如，LOGO)之外，新 式的网站里都有一些隐藏图片，用于网页布局留白和元素对齐的空白图片，以及一些不容 易察觉到的图片标签。总之，你不能仅用商品图片来统计网页上所有的图片。
+而且网页的布局也可能会变化，或者，因为某些原因，我们不想通过图片在网页中的位置 来查找标签。那么当你想抓取随机分布在网站里的某个元素或数据时，就会出现问题。例 如，一些网页的最上面可能有一张商品图片，但是在另一些网页上没有。
+
+解决这类问题的办法，就是直接定位那些标签来查找信息。在本例中，我们直接通过商品 图片的文件路径来查找:
+
+          from urllib.request import urlopen 
+          from bs4 import BeautifulSoup import re
+          html = urlopen("http://www.pythonscraping.com/pages/page3.html")
+          bsObj = BeautifulSoup(html)
+          images = bsObj.findAll("img",{"src":re.compile("\.\.\/img\/gifts/img.*\.jpg")})           for image in images:
+               print(image["src"])
+这段代码会打印出图片的相对路径，都是以 ../img/gifts/img 开头，以 .jpg 结尾，其结果如
+下所示:
+
+       ../img/gifts/img1.jpg
+       ../img/gifts/img2.jpg
+       ../img/gifts/img3.jpg
+       ../img/gifts/img4.jpg
+       ../img/gifts/img6.jpg
+正则表达式可以作为 BeautifulSoup 语句的任意一个参数，让你的目标元素查找工作极具灵 活性。
+
+2.5 获取属性
+
+到目前为止，我们已经介绍过如何获取和过滤标签，以及获取标签里的内容。但是，在网 络数据采集时你经常不需要查找标签的内容，而是需要查找标签属性。比如标签 <a> 指向 的 URL 链接包含在 href 属性中，或者 <img> 标签的图片文件包含在 src 属性中，这时获 取标签属性就变得非常有用了。
+对于一个标签对象，可以用下面的代码获取它的全部属性:
+     
+     myTag.attrs
+要注意这行代码返回的是一个 Python 字典对象，可以获取和操作这些属性。比如要获取图 片的资源位置 src，可以用下面这行代码:
+
+     myImgTag.attrs["src"]
+
+2.6 Lambda表达式
+
+如果在学校读的是计算机科学专业，那么可能学过 Lambda 表达式，不过可能从来没有用 过它。如果你不是计算机科学专业，它们看着可能有点儿陌生(或者只是“曾经学习过的 东西”)。在这一节里，虽然我们不打算深入学习这个相当实用的函数，但是会用几个例子 来演示它们是如何用在网络数据采集中的。
+
+Lambda 表达式本质上就是一个函数，可以作为其他函数的变量使用;也就是说，一个函 数不是定义成 f(x, y)，而是定义成 f(g(x), y)，或 f(g(x), h(x)) 的形式。
+
+BeautifulSoup 允许我们把特定函数类型当作 findAll 函数的参数。唯一的限制条件是这些 函数必须把一个标签作为参数且返回结果是布尔类型。BeautifulSoup 用这个函数来评估它 遇到的每个标签对象，最后把评估结果为“真”的标签保留，把其他标签剔除。
+
+例如，下面的代码就是获取有两个属性的标签:
+
+     soup.findAll(lambda tag: len(tag.attrs) == 2)
+     
+这行代码会找出下面的标签:
+
+          <div class="body" id="content"></div>
+          <span style="color:red" class="title"></span>
+          
+如果你愿意多写一点儿代码，那么在 BeautifulSoup 里用 Lambda 表达式选择标签，将是正 则表达式的完美替代方案。
+
+2.7 超越BeautifulSoup
+
+虽然本书全部用 BeautifulSoup(也是 Python 里最受欢迎的 HTML 解析库之一)，但它并不
+是你唯一的选择。如果 BeautifulSoup 不能满足你的需求，你可以看看其他的库。
+
+• lxml
+
+这个库(http://lxml.de/)可以用来解析 HTML 和 XML 文档，以非常底层的实现而闻名 于世，大部分源代码是用 C 语言写的。虽然学习它需要花一些时间(其实学习曲线越 陡峭，表明你可以越快地学会它)，但它在处理绝大多数 HTML 文档时速度都非常快。
+
+• HTML parser
+
+这是 Python 自带的解析库(https://docs.python.org/3/library/html.parser.html)。因为它不 用安装(只要装了 Python 就有)，所以可以很方便地使用。
+
+
