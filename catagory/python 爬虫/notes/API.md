@@ -23,6 +23,9 @@ API 很容易使用。其实你只要在浏览器里输入下面的网址就可�
       应该会出现下面的结果:
    
        {"ip":"50.78.253.58","country_code":"US","country_name":"美国","region_ code":"MA","region_name":"Massachusetts","city":"Chelmsford","zipcode":"01824", "latitude":42.5879,"longitude":-71.3498,"metro_code":"506","area_code":"978"}
-       
+
+    因为时间比较久网站没有了： 
+![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/python%20%E7%88%AC%E8%99%AB/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-06-05%2012.42.29.png )
+ 
 你可能会想，这不就是在浏览器窗口输入一个网址，按回车后获取的(只是 JSON 格式) 信息吗?究竟 API 和普通的网址访问有什么区别呢?如果不考虑 API 高大上的名称，其实 两者没啥区别。API 可以通过 HTTP 协议下载文件，和 URL 访问网站获取数据的协议一 样，它几乎可以实现所有在网上干的事情。API 之所以叫 API 而不是叫网站的原因，其实 是首先 API 请求使用非常严谨的语法，其次 API 用 JSON 或 XML 格式表示数据，而不是 HTML 格式。
 
