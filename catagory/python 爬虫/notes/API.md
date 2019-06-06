@@ -389,4 +389,13 @@ Time zone API 需要用一个 Unix 时间戳才能发出请求。它可以让 Go
 
 如果你经常用维基百科，可能会注意到词条的编辑历史页面，里面是一列编辑记录。如果 用户先登入维基百科再编辑词条，他们的用户名就会显示出来。如果不先登录就对词条进 行编辑，他们的 IP 地址就会显示在编辑历史中，如图 4-4 所示。
 
+![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/python%20%E7%88%AC%E8%99%AB/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-06-06%2014.37.00.png)
+
+图 4-4:维基百科 Python 词条的编辑历史页面的匿名编辑者的 IP 地址
+
+上图中我们标注的 IP 地址是 121.97.110.145。用 freegeoip.net 的 API，我们可以查出这
+个 IP 地址的地理位置(IP 地址有时会改变地理位置)是在菲律宾(Phillipines)的奎松市 (Quezon)。
+
+一个这样的 IP 地址并没什么意义，但是如果我们可以收集大量维基百科编辑者的地理数 据呢?几年前我做过这件事儿，当时用 Google 的地理图形库(Geochart library，https:// developers.google.com/chart/interactive/docs/gallery/geochart)做了一个显示维基百科英文版 的编辑者所在位置的可视图，后来又做了其他语言的版本，如图 4-5 所示。
+
 
