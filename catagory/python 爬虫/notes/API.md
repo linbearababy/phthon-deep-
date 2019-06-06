@@ -414,15 +414,16 @@ Time zone API 需要用一个 Unix 时间戳才能发出请求。它可以让 Go
     def getlinks(articleUrl):
         html = ("http://en.wikipedia.org"+articleUrl)
         bsObj = BeautifulSoup(html)
-        obj = bsObj.find("div", {"id" : bodyContent"}).findAll("a", href = re.compile("^(/wiki/)((?!:).)*$"))
-        return obj
+        return bsObj.find("div", {"id":"bodyContent"}).findAll("a",
+                          href=re.compile("^(/wiki/)((?!:).)*$"))
+
 
     def getHistoryIPs(pageUrl):
         # 编辑历史页面URL链接格式是:
         # http://en.wikipedia.org/w/index.php?title=Title_in_URL&action=history
         pageUrl = pageUrl.replace("/wiki/", "")
         historyUrl = "http://en.wikipedia.org/w/index.php?title="
-    +pageUrl+"&action=history"
+                        +pageUrl+"&action=history"
         print("history url is: "+historyUrl)
         html = urlopen(historyUrl)
         bsObj = BeautifulSoup(html)
@@ -443,6 +444,31 @@ Time zone API 需要用一个 Unix 时间戳才能发出请求。它可以让 Go
             for historyIP in historyIPs:
                 print(historyIP)
             
-    newLink = links[random.randint(0, len(links)-1)].attrs["href"]
-    links = getLinks(newLink)
+        newLink = links[random.randint(0, len(links)-1)].attrs["href"]
+        links = getLinks(newLink)
+
+这个程序包括两个函数:getLinks(第 3 章里用过)和新的函数 getHistoryIPs，搜索所 有 mw-anonuserlin 类里面的链接信息(匿名用户的 IP 地址，不是用户名)，返回一个链 接列表。
+
+上面的代码还用了一些随机的(不过对这个示例是有效的)搜索模式来查找词条的编 辑历史。首先获取起始词条连接的所有词条的编辑历史(示例中是 Python programming language 词条)。然后，随机选择一个词条作为起始点，再获取这个页面连接的所有词条的 编辑历史。重复这个过程直到页面没有连接维基词条为止。
+
+
+现在，我们获得了编辑历史的 IP 地址数据，把它们与上一节的 getCountry 函数结合起来， 就可以查询 IP 地址所属的国家和地区了。我对 getCountry 函数做了一点儿修改，处理了 无效或错误的 IP 地址引起的“404 Not Found”异常(比如，写到这里时，freegeoip.net 不 能查询 IPv6 地址，可能会引起 404 错误):
+
+    def getCountry(ipAddress): 
+        try:
+           response = urlopen("http://freegeoip.net/json/"
+                                      +ipAddress).read().decode('utf-8')
+        except HTTPError: return None
+
+        responseJson = json.loads(response) 
+        return responseJson.get("country_code")
+    links = getLinks("/wiki/Python_(programming_language)")
+    while(len(links) > 0): 
+        for link in links:
+            print("-------------------")
+            historyIPs = getHistoryIPs(link.attrs["href"]) 
+                for historyIP in historyIPs:
+                    country = getCountry(historyIP) 
+                        if country is not None:
+                            print(historyIP+" is from "+country)
 
