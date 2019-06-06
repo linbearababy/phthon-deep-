@@ -398,4 +398,51 @@ Time zone API 需要用一个 Unix 时间戳才能发出请求。它可以让 Go
 
 一个这样的 IP 地址并没什么意义，但是如果我们可以收集大量维基百科编辑者的地理数 据呢?几年前我做过这件事儿，当时用 Google 的地理图形库(Geochart library，https:// developers.google.com/chart/interactive/docs/gallery/geochart)做了一个显示维基百科英文版 的编辑者所在位置的可视图，后来又做了其他语言的版本，如图 4-5 所示。
 
+![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/python%20%E7%88%AC%E8%99%AB/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-06-06%2014.39.28.png)
+
+图 4-5:用 Google 的 Geochart 库创建的维基百科编辑者地理位置可视化
+
+首先做一个采集维基百科的基本程序，寻找编辑历史页面，然后把编辑历史里面的 IP 地址 找出来，这并不难。只要对第 3 章的代码做些修改就可以，代码如下所示:
+
+    from urllib.request import urlopen 
+    from bs4 import BeautifulSoup 
+    import datetime
+    import random
+    import re
+
+    random.seed(datetime.datetime.now())
+    def getlinks(articleUrl):
+        html = ("http://en.wikipedia.org"+articleUrl)
+        bsObj = BeautifulSoup(html)
+        obj = bsObj.find("div", {"id" : bodyContent"}).findAll("a", href = re.compile("^(/wiki/)((?!:).)*$"))
+        return obj
+
+    def getHistoryIPs(pageUrl):
+        # 编辑历史页面URL链接格式是:
+        # http://en.wikipedia.org/w/index.php?title=Title_in_URL&action=history
+        pageUrl = pageUrl.replace("/wiki/", "")
+        historyUrl = "http://en.wikipedia.org/w/index.php?title="
+    +pageUrl+"&action=history"
+        print("history url is: "+historyUrl)
+        html = urlopen(historyUrl)
+        bsObj = BeautifulSoup(html)
+        # 找出class属性是"mw-anonuserlink"的链接
+        # 它们用IP地址代替用户名
+        ipAddresses = bsObj.findAll("a", {"class":"mw-anonuserlink"})
+        addressList = set()
+        for ipAddress in ipAddresses:
+            addressList.add(ipAddress.get_text())
+        return addressList
+    
+    links = getLinks("/wiki/Python_(programming_language)")
+
+    while(len(links) > 0):
+        for link in links:
+            print("-------------------")
+            historyIPs = getHistoryIPs(link.attrs["href"])
+            for historyIP in historyIPs:
+                print(historyIP)
+            
+    newLink = links[random.randint(0, len(links)-1)].attrs["href"]
+    links = getLinks(newLink)
 
