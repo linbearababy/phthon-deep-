@@ -472,3 +472,24 @@ Time zone API 需要用一个 Unix 时间戳才能发出请求。它可以让 Go
                         if country is not None:
                             print(historyIP+" is from "+country)
 
+    newLink = links[random.randint(0, len(links)-1)].attrs["href"]
+    links = getLinks(newLink)
+
+完整代码在 http://www.pythonscraping.com/code/6-3.txt。下面是部分输出结果:
+        
+           -------------------
+     history url is: http://en.wikipedia.org/w/index.php?title=Programming_
+     paradigm&action=history
+     68.183.108.13 is from US
+     86.155.0.186 is from GB
+     188.55.200.254 is from SA
+     108.221.18.208 is from US
+     141.117.232.168 is from CA
+     76.105.209.39 is from US
+     182.184.123.106 is from PK
+     212.219.47.52 is from GB
+     72.27.184.57 is from JM
+     49.147.183.43 is from PH
+     209.197.41.132 is from US
+     174.66.150.151 is from US
+
