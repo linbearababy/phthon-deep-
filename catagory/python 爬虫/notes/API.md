@@ -193,4 +193,91 @@ twitter.com/app/new)注册一个新应用。 完成注册之后，你会在一�
 
 ![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/python%20%E7%88%AC%E8%99%AB/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-06-06%2011.29.03.png)
 
+图 4-1:Twitter 的应用设置页面提供了新应用的基本信息
+
+如果你单击“manage keys and access tokens”页面，就会跳转到一个包含更多信息的页面
+上(图 4-2)。
+
 ![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/python%20%E7%88%AC%E8%99%AB/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-06-06%2011.29.15.png)
+
+图 4-2:使用 Twitter 的 API 需要用加密 key
+
+这个页面还包括一个自动生成加密 key 的按钮，可以使得应用被公开访问(比如，你打算 把这个应用作为一本书里的例子使用时)。
+
+# 4.5.2 几个示例
+Twitter 的验证系统用 OAuth 验证，非常复杂;最好找一个成熟稳定的 Python 库来处理它， 不要自己从头写代码来实现。因为手工处理 Twitter 的 API 是非常复杂的工作，所以本节 内容的重点是用 Python 代码来实现 API 的交互，不是亲手实现这个 API。
+在编写本书时，有很多 Python 2.x 版本的库可以与 Twitter 进行交互，但是 Python 3.x 版本 的库比较少。好在最好的一个 Python Twitter 库(名字也叫 Twitter)也支持 Python 3.x 版 本。你可以从 Python Twitter Tools(PTT，http://mike.verdone.ca/twitter/#downloads)网站 下载并安装这个库(pip安装也可以，pip install twitter):
+
+     $cd twitter-x.xx.x
+     $python setup.py install
+--------------------
+
+    Twitter 访问权限
+    
+    应用的默认访问权限(credential permissions)是只读(read-only)模式，除
+          了让你的应用发推文之外，这样的权限可以满足大部分需求。
+    如果想把令牌的权限改成读 / 写(read/write)模式，你可以在 Twitter 的应用 控制面板的权限栏进行修改。改变权限后令牌会重新生成。
+    如果有需要你也可以更新应用的令牌权限，用它登录你的 Twitter 账号直接 收发推文。不过要注意信息安全。通常，应该对不同的应用授予不同的权 限，而不是给那些不需要太多权限的应用过多的访问权限。
+    
+我们的第一个练习是搜索某个推文。下面的代码连接 Twitter API，然后打印一个包含 #python 标签的推文 JSON 列表。记得用的时候把对应的信息替换成你的 OAuth 验证信息:
+
+    from twitter import Twitter
+    
+     t = Twitter(auth=OAuth(<Access Token>,<Access Token Secret>,
+                            <Consumer Key>,<Consumer Secret>))
+    pythonTweets = t.search.tweets(q = "#python") 
+    print(pythonTweets)
+    
+虽然这个程序的打印结果可能会很长，但是你可以获得推文的所有信息，包括:推文的发 表日期和具体时间，转发或收藏的信息，用户账号和简介图片的信息，等等。虽然你只想 看这些推文的部分内容，但是 Twitter API 是为那些想在自己网站上显示完整推文的开发者 设计的，因此会包含许多内容。
+
+你也可以通过 API 发一篇推文来看看效果:
+
+    from twitter import *
+    t = Twitter(auth=OAuth(<Access Token>, <Access Token Secret>,
+                                  <Consumer Key>, <Consumer Secret>))
+                                  
+    statusUpdate = t.statuses.update(status='Hello, world!')
+    print(statusUpdate)
+    
+推文的 JSON 格式数据(JSON 字段和内容都用双引号，这是 Python 字符串打印形式的内
+容)如下所示:
+
+    {'created_at': 'Sun Nov 30 07:23:39 +0000 2014', 'place': None, 'in_reply_to_scr een_name': None, 'id_str': '538956506478428160', 'in_reply_to_user_id: None,'lan g': 'en', 'in_reply_to_user_id_str': None, 'user': {'profile_sidebar_border_colo r': '000000', 'profile_background_image_url': 'http://pbs.twimg.com/profile_back ground_images/497094351076347904/RXn8MUlD.png', 'description':'Software Engine er@LinkeDrive, Masters student @HarvardEXT, @OlinCollege graduate, writer @OReil lyMedia. Really tall. Has pink hair. Female, despite the name.','time_zone': 'Ea stern Time (US & Canada)', 'location': 'Boston, MA', 'lang': 'en', 'url': 'http: //t.co/FM6dHXloIw', 'profile_location': None, 'name': 'Ryan Mitchell', 'screen_n ame': 'Kludgist', 'protected': False, 'default_profile_image': False, 'id_str': '14983299', 'favourites_count': 140, 'contributors_enabled': False, 'profile_use _background_image': True, 'profile_background_image_url_https': 'https://pbs.twi mg.com/profile_background_images/497094351076347904/RXn8MUlD.png', 'profile_side bar_fill_color': '889654', 'profile_link_color': '0021B3', 'default_profile': Fa lse, 'statuses_count': 3344, 'profile_background_color': 'FFFFFF', 'profile_imag e_url': 'http://pbs.twimg.com/profile_images/496692905335984128/XJh_d5f5_normal. jpeg', 'profile_background_tile': True, 'id': 14983299, 'friends_count': 409, 'p rofile_image_url_https': 'https://pbs.twimg.com/profile_images/49669290533598412 8/XJh_d5f5_normal.jpeg', 'following': False, 'created_at': 'Mon Jun 02 18:35:1
+           8 +0000 2008', 'is_translator': False, 'geo_enabled': True, 'is_translation_enabl
+       ed': False, 'follow_request_sent': False, 'followers_count': 2085, 'utc_offset'
+       : -18000, 'verified': False, 'profile_text_color': '383838', 'notifications': F
+       alse, 'entities': {'description': {'urls': []}, 'url': {'urls': [{'indices': [
+       0, 22], 'url': 'http://t.co/FM6dHXloIw', 'expanded_url': 'http://ryanemitchell.
+       com', 'display_url': 'ryanemitchell.com'}]}}, 'listed_count': 22, 'profile_banne
+       r_url': 'https://pbs.twimg.com/profile_banners/14983299/1412961553'}, 'retweeted
+       ': False, 'in_reply_to_status_id_str': None, 'source': '<a href="http://ryanemit
+       chell.com" rel="nofollow">PythonScraping</a>', 'favorite_count': 0, 'text': 'Hell
+       o,world!', 'truncated': False, 'id': 538956506478428160, 'retweet_count': 0, 'fa
+       vorited': False, 'in_reply_to_status_id': None, 'geo': None, 'entities': {'user_m
+       entions': [], 'hashtags': [], 'urls': [], 'symbols': []}, 'coordinates': None, '
+       contributors': None}
+ 
+ 这就是发了一篇推文的结果。我有时觉得 Twitter 之所以要限制 API 访问次数，是因为每 个推文的字节很多，请求响应实在太费流量。
+
+对于获取一组推文的请求，你可以通过设置推文数量来限制条数:
+
+    pythonStatuses = t.statuses.user_timeline(screen_name="montypython", count=5)             print(pythonStatuses)
+
+这个例子中，我们请求 @montypython 推文中(也包括转发的推文)按时间排序最靠前的 5 条推文。
+尽管这三个例子介绍了 Twitter API 的许多功能(搜索推文，获取任意用户的推文，用自 己的账号发推文)，但是 Twitter Python 库的能力远不止这些。你还可以搜索和操作 Twitter 的信息列表，已关注和未关注的用户，以及查看用户的简介信息，等等。完整的文档请在 GitHub(https://github.com/sixohsix/twitter)上查看。
+
+# 4.6 Google API
+ 
+ Google 是目前为网民提供最全面、最好用的网络 API 套件(collection)的公司之一。无 论你想处理哪种信息，包括语言翻译、地理位置、日历，甚至基因数据，Google 都提供了 API。Google 还为它的一些知名应用提供 API，比如 Gmail、YouTube 和 Blogger 等。
+ 
+ 查看 Google API 有两种方式。一种方式是通过产品页面(https://developers.google.com/ products/)查看，里面有许多 API、软件开发工具包，以及其他软件开发者感兴趣的项目。 另一种方式是 API 控制台(https://console.developers.google.com/)，里面提供了方便的接口 来开启和关闭 API 服务，查看流量限制和使用情况，还可以和 Google 强大的云计算平台 的开发实例结合使用。
+ 
+Google 的大多数 API 都是免费的，不过有些需要付费，比如搜索 API 需要一个付费的 授权。Google 的免费 API 套件对普通版的账号也是非常慷慨的，允许每天进行 250 次到 20 000 000 次的访问。还有一些 API 可以通过验证信用卡提高流量上限(不需要支付费 用)。比如，Google 的地点查询 API 每 24 小时的流量限制是 1000 次，但是如果你通过 了信用卡验证，就可以提高到 150 000 次。更多的信息请参考 Google 的 API 使用限额和 计费方式页面(https://developers.google.com/places/webservice/usage)。
+
+# 4.6.1 开始
+
+如果你有 Google 账号，可以查看自己可用的 API 列表，并通过 Google 开发者控制台 (https://console.developers.google.com/)创建 API 的 key。如果你没有 Google 账号，请在创
+建 Google 账号页面(https://accounts.google.com/SignUp)建立自己的账号。
+
+
+当你登录账号或账号创建完成后，就能在 API 控制台页面(https://console.developers. google.com/project/201151233021/apiui/)看到一些账号信息，包含 API 的 key。单击左边菜 单的“Credentials”(凭证)选项(图 4-3):
