@@ -545,3 +545,12 @@ Time zone API 需要用一个 Unix 时间戳才能发出请求。它可以让 Go
 
         newLink = links[random.randint(0, len(links)-1)].attrs["href"]
         links = getLinks(newLink)
+
+# 4.9 再说一点API
+本章我们介绍了几个新式 API 常用的获取网络数据的方式，重点介绍了有助于网络数据采 集工作的 API 用法。但是，对 API 的这点儿介绍还是远远不够的，API 的内容非常丰富， 这里并没有体现出 API 具有“许多不同的软件都可以通过相同的 API 分享数据”的特点。
+
+由于本书的主题是网络数据采集，因此无意成为数据收集的百科全书，如果你需要，我只 能为你推荐一些优质的资源，帮助你对这个主题进行深入的研究。
+
+Leonard Richardson、Mike Amundsen 和 Sam Ruby 的 RESTful Web APIs(http://shop.oreilly. com/product/0636920028468.do)为网络 API 的用法提供了非常全面的理论与实践指导。另 外，Mike Amundsen 的精彩视频教学课程 Designing APIs for the Web(http://shop.oreilly. com/product/110000125.do)，也可以教你创建自己的 API。如果你想把自己采集的数据用 一种便捷的方式分享出来，他的视频非常有用。
+
+虽然初看网络数据采集和网络 API 好像完全是两个不同的主题，但是希望这一章的内容 可以为你呈现出两者在网络数据收集这个领域中相互补充的能力。从某种意义上看，网络 API 的使用可以作为网络数据采集的一个子集。毕竟，最终都是要从网络服务器收集数据， 然后把它们解析成可用的数据格式，这和你用任何网络爬虫做的事情一模一样。
