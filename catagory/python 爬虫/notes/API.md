@@ -282,3 +282,111 @@ Google 的大多数 API 都是免费的，不过有些需要付费，比如搜�
 
 当你登录账号或账号创建完成后，就能在 API 控制台页面(https://console.developers. google.com/project/201151233021/apiui/)看到一些账号信息，包含 API 的 key。单击左边菜 单的“Credentials”(凭证)选项(图 4-3):
 
+![](https://github.com/linbearababy/phthon-deep-/tree/master/catagory/python%20%E7%88%AC%E8%99%AB/pictures)
+
+图 4-3:Google 的 API 凭证页面
+
+在凭证页面，你可以单击“Create new Key”按钮创建新的 API key。为了你的账号安全， 建议限制 API 使用的 IP 地址或 URL 链接。你也可以创建一个可用于任意 IP 地址或 URL 的 API key，只要把“Accept Request From These Server IP Addresses”(接受这些服务器 IP 地址发出的请求)这一栏空着就行了。但是，请记住保证 API key 的安全性是非常重要的 事情，如果你不限制允许使用 API 的 IP 地址——任何使用你的 API key 调用你的 API 都 算成是你的消费，即使你并不知情。
+
+你也可以建立多个 API key。比如，你可以为每个项目都分配一个单独的 API key，也可以 为每个网站域名都分配一个 API key。但是，Google 的 API 流量是按照每个账号分配的， 不是按照每个 key 分配的，所以这样做虽然可以方便地管理 API 权限，但是并不会提高你 的可用流量!
+
+
+# 4.6.2 几个示例
+
+Google 最受欢迎的(个人认为也是最有趣的)API 都在 Google 地图 API 套件中。你可能 见过很多网站都在用嵌入式 Google 地图，觉得自己对这类功能很熟悉。但是，地图 API 远比嵌入式地图的功能丰富得多——你可以把街道地址解析成经 / 纬度(longitude/latitude) 坐标值，地球上任意点的海拔高度，做出基于位置的可视化图形，获取任意位置的时区信 息，以及其他一些地图相关的事情。
+
+在你自己尝试这些例子的时候，请从 Google 的 API 控制台里把对应的 API 激活。Google 会把这些 API 的激活量作为应用量度(metric，即“统计多少用户在使用这个 API”)，所 以在使用这些 API 之前你需要激活它们。
+
+用 Google 的 Geocode(地理位置信息)API 你可以在浏览器里实现一个简单的 GET 请求， 把街道地址(这里用的是 Boston Museum of Science，里面有 Science Park)解析成纬度和 经度:
+
+    https://maps.googleapis.com/maps/api/geocode/json?address=1+Science+Park+Boston+MA+ 02114&key=<你的API key>
+    
+服务器响应的结果是:
+
+    "results" : [ { "address_components" : [ { "long_name" : "Museum Of Science Drive way", "short_name" : "Museum Of Science Driveway", "types" : [ "route" ] }, { "l ong_name" : "Boston", "short_name" : "Boston", "types" : [ "locality", "politica l" ] }, { "long_name" : "Massachusetts", "short_name" : "MA", "types" : [ "admin istrative_area_level_1", "political" ] }, { "long_name" : "United States", "shor t_name" : "US", "types" : [ "country", "political" ] }, { "long_name" : "0211
+    4", "short_name" : "02114", "types" : [ "postal_code" ] } ], "formatted_address" : "Museum Of Science Driveway, Boston, MA 02114, USA", "geometry" : { "bounds" : { "northeast" : { "lat" : 42.368454, "lng" : -71.06961339999999 }, "southwest" : { "lat" : 42.3672568, "lng" : -71.0719624 } }, "location" : { "lat" : 42.3677994 , "lng" : -71.0708078 }, "location_type" : "GEOMETRIC_CENTER", "viewport" : { "n ortheast" : { "lat" : 42.3692043802915, "lng" : -71.06943891970849 }, "southwest " : { "lat" : 42.3665064197085, "lng" : -71.0721368802915 } } }, "types" : [ "ro ute" ] } ], "status" : "OK" }
+
+其实我们在 API 里发送的地址格式并不好。但是 Google 就是 Google，Geocode API 会自动 处理这些没有邮政编码或者州信息(甚至写错了)的地址，然后给你反馈标准的地址信息。 例如，用错误的参数 1+Skience+Park+Bostton+MA(甚至没邮编)也会反馈同样的结果。
+
+我曾经在一些任务中使用过 Geocode API，不仅是对用户在网站上填的地址进行标准化，还 有采集网站上看着像地址的信息，用 API 对它们重新处理，形成更容易存储和搜索的数据。
+
+你还可以用 Time zone(时区)API 获取任意经纬度的时区信息:
+
+    https://maps.googleapis.com/maps/api/timezone/json?location=42.3677994,-71.0708
+    078&timestamp=1412649030&key=<你的 API key>
+
+服务器响应的结果是:
+
+    { "dstOffset" : 3600, "rawOffset" : -18000, "status" : "OK", "timeZon eId" : "America/New_York", "timeZoneName" : "Eastern Daylight Time" }
+
+Time zone API 需要用一个 Unix 时间戳才能发出请求。它可以让 Google 为你提供一个经过 时区调整的夏令时。即使在那些时区不受夏令时影响的地区(比如凤凰城不实行夏令时 7)， API 请求也是需要时间戳的.
+
+
+你可以用地点经纬度获取对应的海拔高度，来结束我们短暂的 Google 地图 API 旅程:
+
+    https://maps.googleapis.com/maps/api/elevation/json?locations=42.3677994,-71.070
+    8078&key=<你的 API key>
+
+返回的结果是该地点海平面以上的海拔高度(单位是米)，其中一个参数“resolution”(分
+辨率)的数值表示对这个点进行插值计算的海拔高度的样本数据中与这个点最远的距离 (单位是米)。这个值越小，表示计算出的海拔高度的值越精确。
+
+    { "results" : [ { "elevation" : 5.127755641937256, "location" : { "la t" : 42.3677994, "lng" : -71.0708078 }, "resolution" : 9.543951988220 215 } ], "status" : "OK" }
+    
+# 4.7 解析JSON数据
+
+在本章中，我们介绍了许多不同类型的 API 以及它们的使用方法，也介绍了这些 API 反馈
+的一些简单的 JSON 格式数据。现在让我们看看如何解析和使用这些信息。
+
+本章开始的时候， 我用过 freegeoip.net 网站 IP 查询的例子，可以把 IP 地址解析转换成地理位置:
+
+    http://freegeoip.net/json/50.78.253.58
+    
+我可以获取这个请求的反馈数据，然后用 Python 的 JSON 解析函数来解码:
+
+    import json
+    from urllib.request import urlopen
+    def getCountry(ipAddress):
+        response =      urlopen("http://freegeoip.net/json/"+ipAddress).read()
+                               .decode('utf-8')
+        responseJson = json.loads(response)
+        return responseJson.get("country_code")                       print(getCountry("50.78.253.58"))
+        
+这段代码可以打印出 IP 地址为 50.78.253.58 的国家代码。
+
+这里用的 JSON 解析库是 Python 标准库的一部分。只需要在代码开头写上 import jaon ,你就可以使用它了。 不同于那些需要先把JSON解析成一行JSON对象挥着JSON节点的语言，Python 使用了一种更加灵活的方式，把 JSON 转换成字典，JSON 数组转换成列表，JSON 字符串转换成 Python 字符串。通过这种方式，就可以让 JSON 的获取和操作变得非 常简单。
+
+下面的例子演示了如何使用 Python 的 JSON 解析库，处理 JSON 字符串中可能出现的不同 数据类型:
+
+    
+     import json
+     
+     jsonString = '{"arrayOfNums":[{"number":0},{"number":1},{"number":2}],
+                    "arrayOfFruits":[{"fruit":"apple"},{"fruit":"banana"},
+                                    {"fruit":"pear"}]}'
+                                    
+     jsonObj = json.loads(jsonString)
+     
+    print(jsonObj.get("arrayOfNums")) 
+    print(jsonObj.get("arrayOfNums")[1]) 
+    print(jsonObj.get("arrayOfNums")[1].get("number")+
+    jsonObj.get("arrayOfNums")[2].get("number"))
+    print(jsonObj.get("arrayOfFruits")[2].get("fruit"))
+    
+输出的结果是:
+
+     [{'number': 0}, {'number': 1}, {'number': 2}]
+     {'number': 1}
+     3
+     pear
+     
+ 第一行是一个组词典构成的列表对象，第二行是一个词典对象，第三行是一个整数(第一 行词典列表里整数的和)，第四行是一个字符串。
+ 
+# 4.8 回到主题
+
+虽然，有一些新式的网络应用存在的理由(raison d’être)就是采集现有的数据，再用更好 看的形式展现出来，但是我觉得这些应用没什么意义。如果你用 API 作为唯一的数据源， 那么你最多就是复制别人数据库里的数据，不过都是些已经公布过的“黄花菜”。真正有 意思的事情，是把多个数据源组合成新的形式，或者把 API 作为一种工具，从全新的视角 对采集到的数据进行解释。
+
+下面介绍如何把 API 和网络数据采集结合起来:看看维基百科的贡献者们大都在哪里。
+
+如果你经常用维基百科，可能会注意到词条的编辑历史页面，里面是一列编辑记录。如果 用户先登入维基百科再编辑词条，他们的用户名就会显示出来。如果不先登录就对词条进 行编辑，他们的 IP 地址就会显示在编辑历史中，如图 4-4 所示。
+
+
