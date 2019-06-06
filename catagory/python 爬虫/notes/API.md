@@ -137,3 +137,59 @@ The Echo Nest 音乐数据网站 3 是一个用网络爬虫建立的超级给力
 
 The Echo Nest 的 API 的响应结果由四个部分组成:艺术家(artist)、歌曲(song)、专辑 (track)和风格(genre)。除了风格之外，所有信息都带有唯一的 ID 号，可以通过 API 调 用把信息展示成不同的形式。假如我想获取 Monty Python 喜剧乐团的歌曲，可以用下面的
 链接获取歌曲的 ID(记得把 < 你的 api_key> 替换成你自己的 API key):
+
+    http://developer.echonest.com/api/v4/artist/search?api_key=<你的api_
+        key>&name=monty%20python
+        
+响应的结果是:
+
+    {"response": {"status": {"version": "4.2", "code": 0, "message": "Suc cess"}, "artists": [{"id": "AR5HF791187B9ABAF4", "name": "Monty Pytho n"}, {"id": "ARWCIDE13925F19A33", "name": "Monty Python's SPAMALOT"},
+    {"id": "ARVPRCC12FE0862033", "name": "Monty Python's Graham Chapman" }]}}
+
+还可以用歌曲的 ID 号查询歌曲名称: 
+    
+    http://developer.echonest.com/api/v4/artist/songs?api_key=<你的api_key>&id=
+       AR5HF791187B9ABAF4&format=json&start=0&results=10
+       
+这样就会响应 Monty Python 的歌曲查询结果，都是一些不太流行的歌曲:
+
+    {"response": {"status": {"version": "4.2", "code": 0, "message": "Success"}, "start": 0, "total": 476, "songs": [{"id": "SORDAUE12AF72AC547", "title": "Neville Shunt"}, {"id": "SORBMPW13129A9174D", "title": "Classic (Silbury Hill) (Part 2)"}, {"id": "SOQXAYQ1316771628E", "title": "Famous Person Quiz (The Final Rip Off Remix)"}, {"id": "SOUMAYZ133EB4E17E8", "title": "Always Look On The Bright Side Of Life - Monty Python"}, ...]}}
+    
+另外，我也可以用 name 是 monty%20python 来替换唯一的 ID 号来获取同样的信息: 
+
+    http://developer.echonest.com/api/v4/artist/songs?api_key=<你的api_key>2&name=
+       monty%20python&format=json&start=0&results=10
+       
+用同样的 ID 号，我也可以请求与 Monty Python 风格相似的艺术家:
+
+    http://developer.echonest.com/api/v4/artist/similar?api_key=<你的api_key>&id=
+       AR5HF791187B9ABAF4&format=json&results=10&start=0
+       
+响应的结果包括像 Eric Idle 那样的喜剧艺术家，他是 Monty Python 的一员:
+
+    {"response": {"status": {"version": "4.2", "code": 0, "message": "Suc cess"}, "artists": [{"name": "Life of Brian", "id": "ARNZYOS1272BA7FF 38"}, {"name": "Eric Idle", "id": "ARELDIS1187B9ABC79"}, {"name": "Th e Simpsons", "id": "ARNR4B91187FB5027C"}, {"name": "Tom Lehrer", "id" : "ARJMYTZ1187FB54669"}, ...]}}
+    
+你会发现这些相似艺术家包含一些很有趣的信息(比如，“Tom Lehrer”5)，第一个结果 “The Life of Brian”是 Monty Python 乐团演奏的电影配乐。使用这类取材丰富但人工干预 很少的数据库时，比较痛苦的是有时候会遇到一些无厘头的结果。这在使用第三方 API 创
+建应用时需要格外注意。
+我就介绍这几个 The Echo Nest API 的小例子。具体文档请参考 The Echo Nest API 概述
+
+    (http://developer.echonest.com/docs/v4)。
+The Echo Nest 资助了很多技术与音乐交叉领域的黑客松项目(hackathon，也叫黑客马拉 松、编程马拉松)和编程项目。如果你想从中获取灵感，The Echo Nest 示例页面(http:// static.echonest.com/labs/demo.html)是一个好的起点。
+
+# 4.5 Twitter API
+
+众所周知，Twitter 非常保护自己的 API，这也是理所当然的。这家公司平均每月拥有 2.3
+亿活跃用户和超过 1 亿美元的收入，是不会愿意让用户随意获取信息的。
+Twitter 的 API 请求限制有两种方法:每 15 分钟 15 次和每 15 分钟 180 次，由请求类型决 定。比如你可以 1 分钟获取 12 次(每 15 分钟 180 次的平均数)Twitter 用户基本信息，但 是 1 分钟只能获取 1 次(每 15 分钟 15 次的平均数)这些用户的关注者(follower)。6
+
+# 4.5.1 开始
+
+除了流量限制，Twitter 的 API 验证方式也比 The Echo Nest 要复杂，既要有 API 的 key，
+也要用其他 key。要获取 API 的 key，你需要注册一个 Twitter 账号;可以在注册页面 (https://twitter.com/signup)直接注册。另外，还需要在 Twitter 的开发者网站(https://apps.
+twitter.com/app/new)注册一个新应用。 完成注册之后，你会在一个新页面看到你应用的基本信息，包括自定义的 key(图 4-1)。
+
+---------
+ 注 5:美国歌手、数学家、曲风简洁幽默，https://en.wikipedia.org/wiki/Tom_Lehrer。 注 6:完整的流量限
+
+
+
