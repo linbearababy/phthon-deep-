@@ -281,3 +281,4 @@ Google 的大多数 API 都是免费的，不过有些需要付费，比如搜�
 
 
 当你登录账号或账号创建完成后，就能在 API 控制台页面(https://console.developers. google.com/project/201151233021/apiui/)看到一些账号信息，包含 API 的 key。单击左边菜 单的“Credentials”(凭证)选项(图 4-3):
+
