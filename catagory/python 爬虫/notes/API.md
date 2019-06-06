@@ -191,5 +191,6 @@ twitter.com/app/new)注册一个新应用。 完成注册之后，你会在一�
 ---------
  注 5:美国歌手、数学家、曲风简洁幽默，https://en.wikipedia.org/wiki/Tom_Lehrer。 注 6:完整的流量限
 
+![](https://github.com/linbearababy/phthon-deep-/blob/master/catagory/python%20%E7%88%AC%E8%99%AB/pictures/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-06-06%2011.29.03.png)
 
 
