@@ -3,6 +3,9 @@
 
  #Anaconda:  [https://www.anaconda.com/distribution/]-------download---python 3.6
  
+ #Anaconda: python 3.7
+ https://www.anaconda.com/distribution/#download-section 
+ 
  
 # Window 下安装 Django
 如果你还未安装Python环境需要先下载Python安装包。
